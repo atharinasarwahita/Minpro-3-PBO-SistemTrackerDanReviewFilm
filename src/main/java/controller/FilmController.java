@@ -5,78 +5,96 @@ import models.*;
 import view.FilmView;
 
 public class FilmController {
-    private ArrayList<Film> daftarFilm = new ArrayList<>();
-    private ArrayList<Review> daftarReview = new ArrayList<>();
-    private FilmView view = new FilmView();
-    
-    // Data Dummy untuk menampilkan Film dan Review
-    public FilmController() {
-        daftarFilm.add(new FeatureFilm(1, "13 Bom di Jakarta", "Angga Dwimas Sasongko", 2023, "Action/Thriller", 144, "Chicco Kurniawan", "Oscar"));
-        daftarFilm.add(new AnimatedFilm(2, "Si Juki the Movie", "Faza Meonk", 2017, "Animation/Comedy", 100, "Faza Meonk", "Si Juki", "2D Animation"));
+    private final ArrayList<Film> daftarFilm = new ArrayList<>(); 
+    private final ArrayList<Review> daftarReview = new ArrayList<>(); 
+    private final FilmView view = new FilmView();
 
-        daftarReview.add(new Review(1, 1, 5.0, "Keren!"));
-        }
-    
-//Create Film
-public void tambahFilm() {
-    view.tampilkanTambahFilm();
-    int jenis = ValidasiInput.inputAngka("Pilih jenis (1/2): ");
-    if (jenis < 1 || jenis > 2) {
-        System.out.println("Pilihan jenis film tidak valid!");
-        return; 
+    // auto-increment untuk ID
+    private static int nextFilmId = 1;
+    private static int nextReviewId = 1;
+
+    public FilmController() {
+        // Data Dummy
+        daftarFilm.add(new FeatureFilm(nextFilmId++, "13 Bom di Jakarta", "Angga Dwimas Sasongko", 2023, "Action/Thriller", 144, "Chicco Kurniawan", "Oscar"));
+        daftarFilm.add(new AnimatedFilm(nextFilmId++, "Si Juki the Movie", "Faza Meonk", 2017, "Animation/Comedy", 100, "Faza Meonk", "Si Juki", "2D Animation"));
+
+        daftarReview.add(new Review(nextReviewId++, 1, 5.0, "Keren!", false));
     }
-    
-    int idFilm = ValidasiInput.inputAngka("Masukkan ID Film: ");
-    
-    //Validasi ID unik
-    for (Film f : daftarFilm) {
-        if (f.getIdFilm() == idFilm) {
-            System.out.println("ID Sudah Digunakan! Silakan gunakan ID lain.");
-            return;
-        }
-    }
-    
-    String judul = ValidasiInput.inputTeks("Masukkan Judul Film: ");
-    String sutradara = ValidasiInput.inputTeks("Masukkan Sutradara Film: ");
-    int tahunRilis = ValidasiInput.inputAngka("Masukkan Tahun Rilis Film: ");
-    String genre = ValidasiInput.inputTeks("Masukkan Genre Film: ");
-    int durasi = ValidasiInput.inputAngka("Masukkan Durasi Film: ");
-    
-    switch (jenis) {
-        case 1 -> {
-            String pemeranUtama = ValidasiInput.inputTeks("Masukkan Nama Aktor Utama: ");
-            String karakter = ValidasiInput.inputTeks("Masukkan Nama Karakter/Tokoh: ");
-            daftarFilm.add(new FeatureFilm(idFilm, judul, sutradara, tahunRilis, genre, durasi, pemeranUtama, karakter));
-        }
-        case 2 -> {
-            String va = ValidasiInput.inputTeks("Masukkan Nama Voice Actor (VA): ");
-            String karakter = ValidasiInput.inputTeks("Masukkan Nama Karakter Animasi: ");
-            String gaya = ValidasiInput.inputTeks("Masukkan Gaya Animasi (misal: 2D, 3D CGI): ");
-            daftarFilm.add(new AnimatedFilm(idFilm, judul, sutradara, tahunRilis, genre, durasi, va, karakter, gaya));
-        }
-        default -> {
+
+    // CREATE FILM
+    public void tambahFilm() {
+        view.tampilkanTambahFilm();
+        int jenis = ValidasiInput.inputAngka("Pilih jenis (1/2): ");
+        if (jenis < 1 || jenis > 2) {
             System.out.println("Pilihan jenis film tidak valid!");
             return;
         }
-    }
-    
-    System.out.println("\nYeayy, film kamu berhasil ditambahkan!");
-    lihatFilm();
-}
 
-//Create Review
-public void tambahReview() {
-    if (daftarFilm.isEmpty()) {
-        System.out.println("Belum ada film di sini!");
-        return;
-    }
-            
-    lihatFilm();
-    view.tampilkanTambahReview();
+        int idFilm = nextFilmId;
+        System.out.println("ID Film: " + idFilm);
 
-    int cariFilm;
+        String judul = ValidasiInput.inputNonKosong("Masukkan Judul Film: ");
+        String sutradara = ValidasiInput.inputNonKosong("Masukkan Sutradara Film: ");
+        String genre = ValidasiInput.inputNonKosong("Masukkan Genre Film: ");
+
+        Film validator;
+        if (jenis == 1){
+            validator = new FeatureFilm(idFilm, judul, sutradara, 2000, genre, 120, "-", "-");
+        } else { validator = new AnimatedFilm(idFilm, judul, sutradara, 2000, genre, 120, "-", "-", "-");
+        }
+
+        int tahunRilis;
+        while (true) {
+            tahunRilis = ValidasiInput.inputAngka("Masukkan Tahun Rilis Film: ");
+            if (validator.setTahunRilis(tahunRilis)) {
+                break;
+            }
+        }
+
+        int durasi;
+        while (true) {
+            durasi = ValidasiInput.inputAngka("Masukkan Durasi Film (menit): ");
+            if (validator.setDurasi(durasi)) {
+                break;
+            }
+        }
+
+        System.out.println("------------------------------------------------------------------");
+
+        switch (jenis) {
+            case 1 -> {
+                String pemeranUtama = ValidasiInput.inputNonKosong("Masukkan Nama Aktor Utama: ");
+                String karakter = ValidasiInput.inputNonKosong("Masukkan Nama Karakter/Tokoh: ");
+                daftarFilm.add(new FeatureFilm(idFilm, judul, sutradara, tahunRilis, genre, durasi, pemeranUtama, karakter));
+            }
+            case 2 -> {
+                String va = ValidasiInput.inputNonKosong("Masukkan Nama Voice Actor (VA): ");
+                String karakter = ValidasiInput.inputNonKosong("Masukkan Nama Karakter Animasi: ");
+                String gaya = ValidasiInput.inputNonKosong("Masukkan Gaya Animasi: ");
+                daftarFilm.add(new AnimatedFilm(idFilm, judul, sutradara, tahunRilis, genre, durasi, va, karakter, gaya));
+            }
+        }
+
+        nextFilmId++;
+        System.out.println("------------------------------------------------------------------");
+        System.out.println("\nYeayy, film kamu berhasil ditambahkan!");
+        lihatFilm();
+    }
+
+    // CREATE REVIEW
+    public void tambahReview() {
+        if (daftarFilm.isEmpty()) {
+            System.out.println("Belum ada film di sini!");
+            return;
+        }
+
+        view.tampilkanRingkasanFilm(daftarFilm, daftarReview);
+        view.tampilkanTambahReview();
+
+        int cariFilm;
         while (true) {
             cariFilm = ValidasiInput.inputAngka("Masukkan ID Film yang mau di-review: ");
+
             boolean adaFilm = false;
             for (Film f : daftarFilm) {
                 if (f.getIdFilm() == cariFilm) {
@@ -84,104 +102,100 @@ public void tambahReview() {
                     break;
                 }
             }
-            if (adaFilm) {
-                break;
-            } else {
+
+        if (!adaFilm) {
                 System.out.println("ID film tidak ada di sistem! Silakan coba lagi.");
+            } else {
+                break; 
             }
         }
 
-    int idReview;
-        while (true) {
-            idReview = ValidasiInput.inputAngka("Masukkan ID Review: ");
-            boolean duplikat = false;
-            for (Review r : daftarReview) {
-                if (r.getIdReview() == idReview) {
-                    duplikat = true;
-                    break;
-                }
-            }
-            if (duplikat) {
-                System.out.println("ID Sudah Digunakan! Silakan gunakan ID lain.");
-            } else {
+        boolean isRewatch = false;
+        for (Review r : daftarReview) {
+            if (r.getIdFilm() == cariFilm) {
+                isRewatch = true;
                 break;
             }
         }
+
+        if (isRewatch) {
+            System.out.println("\nFilm ini sudah pernah kamu ulas. Review baru akan disimpan sebagai [REWATCH LOG].");
+        }
+
+        int idReview = nextReviewId;
+        System.out.println("ID Review: " + idReview);
+
+        Review reviewSemn = new Review(idReview, cariFilm, 5.0, "", isRewatch);
 
         double rating;
         while (true) {
             rating = ValidasiInput.inputRating("Masukkan Rating Film (1 - 5): ");
-            Review cekRating = new Review(idReview, cariFilm, 1.0, "dummy");
-            if (cekRating.setRating(rating)) {
+            if (reviewSemn.setRating(rating)) {
                 break;
             }
         }
 
-        String ulasan = ValidasiInput.inputTeks("Masukkan Ulasan Film: ");
-        Review reviewBaru = new Review(idReview, cariFilm, rating, ulasan);
-        daftarReview.add(reviewBaru);
+        String ulasan = ValidasiInput.inputNonKosong("Masukkan Ulasan Film: ");
 
-        System.out.println("Yeayy, review berhasil ditambahkan!");
+        daftarReview.add(new Review(idReview, cariFilm, rating, ulasan, isRewatch));
+        nextReviewId++;
+
+        System.out.println("\nYeayy, ulasan berhasil ditambahkan!");
         lihatFilm();
     }
 
-//READ (menampilkan film & review dari package view)
-public void lihatFilm() {
-    view.tampilkanFilm(daftarFilm, daftarReview);
-}
-
-//UPDATE REVIEW
-public void updateReview() {
-    if (daftarReview.isEmpty()) {
-        System.out.println("\nBelum ada review yang bisa diubah!");
-        return;
+    // READ
+    public void lihatFilm() {
+        view.tampilkanFilm(daftarFilm, daftarReview);
     }
 
-    lihatFilm();
-    view.tampilkanUpdateReview();
-    int updateIdReview = ValidasiInput.inputAngka("Masukkan ID review yang mau di-update: ");
+    // UPDATE REVIEW
+    public void updateReview() {
+        if (daftarReview.isEmpty()) {
+            System.out.println("\nBelum ada review yang bisa diubah!");
+            return;
+        }
 
-    boolean adaReview = false;
-    for (Review r : daftarReview) {
-        if (r.getIdReview() == updateIdReview) {
-            adaReview = true;
-            System.out.println("(1) Rating");
-            System.out.println("(2) Ulasan");
-            int updateReviewPilihan = ValidasiInput.inputAngka("Pilih ulasan film yang ingin diubah: ");
+        lihatFilm();
+        view.tampilkanUpdateReview();
+        int updateIdReview = ValidasiInput.inputAngka("Masukkan ID review yang mau di-update: ");
 
-            switch (updateReviewPilihan) {
-                case 1 -> {
-                    double ratingBaru;
-                    while (true) {
-                        ratingBaru = ValidasiInput.inputRating("Rating Film Baru (1 - 5): ");
-                        if (r.setRating(ratingBaru)) {
-                            break;
+        for (Review r : daftarReview) {
+            if (r.getIdReview() == updateIdReview) {
+                System.out.println("(1) Rating");
+                System.out.println("(2) Ulasan");
+                int pilihan = ValidasiInput.inputAngka("Pilih bagian yang ingin diubah: ");
+
+                switch (pilihan) {
+                    case 1 -> {
+                        double ratingBaru;
+                        while (true) {
+                            ratingBaru = ValidasiInput.inputRating("Rating Film Baru (1 - 5): ");
+                            if (r.setRating(ratingBaru)) {
+                                break;
+                            }
                         }
+                        System.out.println("\nYeayy, rating baru kamu berhasil diubah!");
+                        lihatFilm();
+                        return;
                     }
-                    System.out.println("\nYeayy, rating baru kamu berhasil diubah!");
-                    lihatFilm();
-                    return;
+                    case 2 -> {
+                        String ulasanBaru = ValidasiInput.inputNonKosong("Ulasan Film Baru: ");
+                        r.setUlasan(ulasanBaru);
+                        System.out.println("\nYeayy, ulasan terbaru kamu berhasil diubah!");
+                        lihatFilm();
+                        return;
+                    }
+                    default -> System.out.println("Pilihan tidak valid!");
                 }
-
-                case 2 -> {
-                String ulasanBaru = ValidasiInput.inputTeks("Ulasan Film Baru: ");
-                r.setUlasan(ulasanBaru);
-                System.out.println("\nYeayy, ulasan terbaru kamu berhasil diubah!");
-                lihatFilm();
                 return;
-                }
-
-                default -> System.out.println("Pilihan tidak valid!");
             }
         }
+        System.out.println("ID Review tidak ditemukan!");
     }
-    if (!adaReview) {
-    System.out.println("ID Review tidak ditemukan!");
-    }
-}
- 
-//DELETE REVIEW
-public void hapusReview() {
+
+    // DELETE REVIEW
+    public void hapusReview() {
         if (daftarReview.isEmpty()) {
             System.out.println("\nBelum ada review yang bisa dihapus!");
             return;
@@ -194,8 +208,7 @@ public void hapusReview() {
         for (Review r : daftarReview) {
             if (r.getIdReview() == hapusReview) {
                 boolean konfirmasi = ValidasiInput.inputKonfirmasi("Apakah kamu benar ingin menghapus review ini? (Y/N): ");
-
-                if (konfirmasi){
+                if (konfirmasi) {
                     daftarReview.remove(r);
                     System.out.println("\nYeayy, review berhasil dihapus!");
                     lihatFilm();

@@ -1,53 +1,100 @@
 package models;
+import java.time.Year;
 
-public class Film {
-    private int idFilm;
-    private String judul;
-    private String sutradara;
-    private int tahunRilis;
-    private String genre;
-    private int durasi;
+public abstract class Film implements Displayable {
+    protected final int idFilm;
+    protected String judul;
+    protected String sutradara;
+    protected int tahunRilis;
+    protected String genre;
+    protected int durasi;
     
-    public Film(int idFilm, String judul, String sutradara, int tahunRilis, String genre, int durasi) {
+    public Film(final int idFilm, String judul, String sutradara, int tahunRilis, String genre, int durasi) {
         this.idFilm = idFilm;
         this.judul = judul;
         this.sutradara = sutradara;
-        this.tahunRilis = tahunRilis;
+        setTahunRilis(tahunRilis);
         this.genre = genre;
-        this.durasi = durasi;
+        setDurasi(durasi);
     }
     
-    public int getIdFilm() {
+    public final int getIdFilm() {
         return idFilm;
     }
     
+    public String getJudul() {
+        return judul;
+    }
+
     public void setJudul(String judul) {
-        this.judul = judul;
+        if (judul != null && !judul.trim().isEmpty()) {
+            this.judul = judul;
+        }
     }
     
     public String getSutradara() {
         return sutradara;
     }
-    
+
     public void setSutradara(String sutradara) {
-        this.sutradara = sutradara;
+        if (sutradara != null && !sutradara.trim().isEmpty()) {
+            this.sutradara = sutradara;
+        }
     }
     
-    public void setTahunRilis(int tahunRilis) {
-        this.tahunRilis = tahunRilis;
+    public int getTahunRilis() {
+        return tahunRilis;
+    }
+
+    public boolean setTahunRilis(int tahunRilis) {
+        int tahunSekarang = Year.now().getValue();
+        if (tahunRilis >= 1888 && tahunRilis <= tahunSekarang) {
+            this.tahunRilis = tahunRilis;
+            return true;
+        } else {
+            System.out.println("Tahun rilis harus antara 1888 hingga tahun " + tahunSekarang + ".");
+            //minimal tahun 1888 adalah tahun dimana film pertama kali dibuat
+            return false;
+        }
     }
     
+    public String getGenre() {
+        return genre;
+    }
+
     public void setGenre(String genre) {
         this.genre = genre;
     }
-    
+
     public int getDurasi() {
         return durasi;
     }
     
-    public void tampilkanInfo() {
-        System.out.println(" [" + idFilm + "] " + judul + " (" + tahunRilis + ")");
-        System.out.println("     Sutradara : " + sutradara);
-        System.out.println("     Genre     : " + genre + " | Durasi: " + durasi + " menit");
+    public boolean setDurasi(int durasi) {
+        if (durasi >= 30) {
+            this.durasi = durasi;
+            return true;
+        } else {
+            System.out.println("Durasi film harus minimal 30 menit.");
+            //minimal durasi 30 menit sesuai dengan standar film pendek
+            return false;
+        }
     }
+
+    // implementasi dari interface Displayable
+    @Override
+    public void tampilkanInfo(boolean ringkas) {
+        if (ringkas) {
+            System.out.println("[" + idFilm + "] " + judul + " (" + tahunRilis + ") - " + genre);
+        } else {
+            System.out.println(" [" + idFilm + "] " + judul + " (" + tahunRilis + ")");
+            System.out.println("     Sutradara : " + sutradara);
+            System.out.println("     Genre     : " + genre + " | Durasi: " + durasi + " menit");
+            tampilkanDetailSpesifik(); 
+        }
+    }
+
+    // abstract method yang wajib diimplementasikan oleh subclass
+    public abstract void tampilkanDetailSpesifik();
 }
+
