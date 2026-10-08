@@ -65,8 +65,8 @@ public class Review implements Displayable{
     @Override
     public void tampilkanInfo(boolean ringkas) {
             if (ringkas) {
-                String tag = isRewatch ? "(Rewatch)" : "";
-                System.out.println("     Review" + idReview + tag + " | " + getRating());
+                String tag = isRewatch ? " (Rewatch)" : "";
+                System.out.println("   > Review " + idReview + tag + " | Rating: " + getRating() + "/5.0");
             } else {
                     if (isRewatch) {
                         System.out.println("     -------------------------------------------------------------");

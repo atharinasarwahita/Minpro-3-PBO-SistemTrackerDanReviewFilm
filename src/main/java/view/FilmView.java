@@ -22,19 +22,16 @@ public class FilmView {
         System.out.println("|                           DAFTAR FILM                          |");
         System.out.println("+----------------------------------------------------------------+");
         for (Film f : daftarFilm) {
-            f.tampilkanInfo(true); 
+            f.tampilkanInfo(true);
 
-            Review reviewFilm = null;
+            boolean adaReview = false;
             for (Review r : daftarReview) {
                 if (r.getIdFilm() == f.getIdFilm()) {
-                    reviewFilm = r;
-                    break;
+                    r.tampilkanInfo(true); 
+                    adaReview = true;
                 }
             }
-
-            if (reviewFilm != null) {
-                System.out.println("    > Rating: " + reviewFilm.getRating() + "/5.0");
-            } else {
+            if (!adaReview) {
                 System.out.println("   [Belum ada review]");
             }
             System.out.println("------------------------------------------------------------------");

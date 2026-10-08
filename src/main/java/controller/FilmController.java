@@ -119,7 +119,7 @@ public class FilmController {
         }
 
         if (isRewatch) {
-            System.out.println("\nFilm ini sudah pernah kamu ulas. Review baru akan disimpan sebagai [REWATCH LOG].");
+            System.out.println("\nFilm ini sudah pernah kamu ulas. Review baru akan disimpan sebagai [REWATCH].");
         }
 
         int idReview = nextReviewId;
