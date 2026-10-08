@@ -26,6 +26,7 @@ public class FeatureFilm extends Film {
         this.karakterLiveAction = karakterLiveAction;
     }
 
+    //metode Polymorphism yaitu Override dari method di superclass
     @Override
     public void tampilkanDetailSpesifik() {
         System.out.println("     Cast      : " + pemeranUtama + " as " + karakterLiveAction);

@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import models.*;
 
 public class FilmView {
-//Menampilkan menu utama
+    //Menampilkan menu utama
     public void tampilkanMenuUtama() {
         System.out.println("\n+ ================ SISTEM TRACKER FILM & REVIEW ================ +");
         System.out.println("| (1) Tambah Film                                                |"); 
@@ -16,6 +16,7 @@ public class FilmView {
         System.out.println("+ ============================================================== +");
     }
     
+    //Menampilkan rngkasan film
     public void tampilkanRingkasanFilm(ArrayList<Film> daftarFilm, ArrayList<Review> daftarReview) {
         System.out.println("\n+----------------------------------------------------------------+");
         System.out.println("|                           DAFTAR FILM                          |");
@@ -40,7 +41,7 @@ public class FilmView {
         }
     }
 
-//READ (Menampilkan Film dan Review)
+    //READ (Menampilkan Film dan Review)
     public void tampilkanFilm(ArrayList<Film> daftarFilm, ArrayList<Review> daftarReview) {
         System.out.println("\n==================================================================");
         System.out.println("                          FILM & REVIEW                           ");

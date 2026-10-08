@@ -15,6 +15,11 @@ public class Review implements Displayable{
         this.ulasan = ulasan;
         this.isRewatch = isRewatch;
     }
+
+    //Overloading constructor (rewatch false)
+    public Review(int idReview, int idFilm, double rating, String ulasan) {
+        this(idReview, idFilm, rating, ulasan, false);
+    }
         
     public int getIdReview() {
         return idReview; 
@@ -29,9 +34,7 @@ public class Review implements Displayable{
     }
     
     public void setUlasan(String ulasan) {
-        if (ulasan != null && !ulasan.isEmpty()) {
-            this.ulasan = ulasan;
-        }
+        this.ulasan = ulasan;
     }
     
     public double getRating() {
@@ -52,7 +55,13 @@ public class Review implements Displayable{
         return isRewatch;
     }
     
-    // implementasi dari interface Displayable
+    //Overloading tanpa parameter
+    @Override
+    public void tampilkanInfo() {
+        tampilkanInfo(false);
+    }
+    
+    // Overloading dengan parameter sekaligus implementasi dari interface Displayable
     @Override
     public void tampilkanInfo(boolean ringkas) {
             if (ringkas) {

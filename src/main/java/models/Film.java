@@ -80,8 +80,14 @@ public abstract class Film implements Displayable {
             return false;
         }
     }
+    
+    //Overloading tanpa paramter
+    @Override
+    public void tampilkanInfo() {
+        tampilkanInfo(false);
+    }
 
-    // implementasi dari interface Displayable
+    //Overlaoding dengan parameter + implementasi dari interface Displayable
     @Override
     public void tampilkanInfo(boolean ringkas) {
         if (ringkas) {

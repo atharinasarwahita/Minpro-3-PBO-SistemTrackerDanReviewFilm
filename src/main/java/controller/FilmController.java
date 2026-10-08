@@ -18,7 +18,7 @@ public class FilmController {
         daftarFilm.add(new FeatureFilm(nextFilmId++, "13 Bom di Jakarta", "Angga Dwimas Sasongko", 2023, "Action/Thriller", 144, "Chicco Kurniawan", "Oscar"));
         daftarFilm.add(new AnimatedFilm(nextFilmId++, "Si Juki the Movie", "Faza Meonk", 2017, "Animation/Comedy", 100, "Faza Meonk", "Si Juki", "2D Animation"));
 
-        daftarReview.add(new Review(nextReviewId++, 1, 5.0, "Keren!", false));
+        daftarReview.add(new Review(nextReviewId++, 1, 5.0, "Keren!"));
     }
 
     // CREATE FILM
