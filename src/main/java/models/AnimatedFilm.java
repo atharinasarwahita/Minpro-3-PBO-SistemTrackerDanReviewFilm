@@ -36,7 +36,7 @@ public class AnimatedFilm extends Film {
         this.gayaAnimasi = gayaAnimasi;
     }
     
-    //metode Polimorphism yaitu Override
+    //metode Polymorphism yaitu Override
     @Override
     public void tampilkanDetailSpesifik() {
         System.out.println("     Voice     : " + pengisiSuara + " as " + karakterAnimasi);

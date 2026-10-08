@@ -77,5 +77,5 @@ public class Review implements Displayable{
                     System.out.println("     Rating : " + getRating());
                     System.out.println("     Ulasan : " + ulasan);
                     }
-            }
-        }
+    }
+}
